@@ -1,4 +1,3 @@
-# armored-warfare-pve-tracker
-Armored Warfare PvE Mission Rotation Tracker
+# Armored Warfare PvE Tracker
 
 Simple self containing html files for keeping track the Armored Warfare PvE mission rotrations
