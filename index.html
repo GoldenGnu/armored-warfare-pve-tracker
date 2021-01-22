@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<title>Armored Warfare PvE Rotation Tracker</title>
 	<link id="favicon" rel="shortcut icon" type="image/png" href=" data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACf0lEQVQ4jY2Ty08TYRTFz/2+mWk7Q2lpyktAHgFCjGh8xbhk4YLEtTujLl36T0g0JiYm/gmuXbhzgSYuxAhEMCYYRFBehWKbTtt5fvNdV1USUDnbm/vLuTfnAP8X/Wsoj90gIikNQ0opAfCJ6UIIYZiW1TUwOH724uW7hhSdbr2+VN4tfTwoba+6lZ/7cRgEWmt9BJC2HWfs3KWpkeGhe4VMNOWkOWPbKUSRQqSYvQAuzPzmyuq35+9fv3rIzAwABgAIKeX0zVtPJ8cGbxvkS0pcpAxGLt8OyzIRhoqyxfHc/OJqznFK1w67NgAAzJwkSvtBLIvdp9HT24dc1sRIbxamoRCoLGYezGBpfg6ZYn/jCICZ2TbERGlzDV+W5zA6MYnJC1exlXJgSgtPZu6jerAP2zahwVUhhJUkSQSAZevrmUKXFdb2b3R35qCCBrbWPqNarcGPgE8LbyAEADDqXjxfKZdXmDkkIiVaDgLP25RWG3oGz4CkifZCEW6tCrfmghMNBmA7FrPWXUR0HsAwM2eN1i21Snmn4KSxuLCIOIrQltlG38Awyvt7COMYliVgZ1JaSu7WWncDqACoihYg9H03CgPPMAyo0EUmbaJWc7Gz/QNxHEMQkGvPa51oArMPYAdA7TcArNE/Mnawt72OjrwN3wvQbDRwUC5DxQpKKbB0gq2N9Q/M/BbAdyJqyj8OvKZI2dTX23klCryM7wcACbiNEEGzglxHj56dffey2ag/IqINAAEAPhJlK5XuOTU0cndwoPeOkzZHv66XkM+KZHlp5ZnXbDwmol1mVsd24RBICinb03bbtBTiut9szCoVv2DmZivCJxURkSCiv1b6F/mJMFVr2FOjAAAAAElFTkSuQmCC" />
+	<meta charset="UTF-8">
 	<script>
 		function startUpdate() {
-			update();
+			updateTime();
 			var intervalId = window.setInterval(function(){
-				update();
+				updateTime();
 			}, 1000);
 		}
-		function update() {
+		function updateTime() {
 			var minutesOffset = document.getElementById("minutes").value;
 			var secondsOffset = document.getElementById("seconds").value;
 			var d = new Date();
@@ -71,6 +72,67 @@
 				}
 			} else {
 				console.log("Storage not supported");
+			}
+		}
+		function loadColumns() {
+			for (var column = 2; column <= 7; column++) {
+				var id = 'show-column-' + column;
+				if (typeof(Storage) !== "undefined") {
+					var value = localStorage.getItem(id);
+					if(value === null) {
+						document.getElementById(id).checked = true;
+					} else {
+						document.getElementById(id).checked = false;
+					}
+					toggleColumn(column);
+				} else {
+					console.log("Storage not supported");
+				}
+			}
+		}
+		function toggleColumn(column) {
+			var id = 'show-column-' + column;
+			var show = document.getElementById(id).checked;
+			if (typeof(Storage) !== "undefined") {
+				if (show) {
+					localStorage.removeItem(id);
+				} else {
+					localStorage.setItem(id, false);
+				}
+			} else {
+				console.log("Storage not supported");
+			}
+			var tbl  = document.getElementById('pve');
+			//Hide cells
+			var rows = tbl.getElementsByTagName('tr');
+			var offset;
+			if (true) {
+				offset = 2;
+			} else {
+				offset = 0;
+			}
+			for (var row = 1; row < rows.length - offset; row++) {
+				var cels = rows[row].getElementsByTagName('td');
+				if (show) {
+					cels[column].style.display = '';
+				} else {
+					cels[column].style.display = 'none';
+				}
+			}
+			//Hide table header
+			if (show) {
+				tbl.getElementsByTagName('th')[column].style.display = '';
+			} else {
+				tbl.getElementsByTagName('th')[column].style.display = 'none';
+			}
+			//Buttom
+			var offset = document.getElementsByClassName('offset');
+			for (var index = 0; index < offset.length; index++) {
+				if (show) {
+					offset[index].colSpan = offset[index].colSpan + 1;
+				} else {
+					offset[index].colSpan = offset[index].colSpan - 1;
+				}
 			}
 		}
 		function toggleFavorite(id) {
@@ -168,7 +230,7 @@
 				['Anvil', 'Quarterback', 'Snake Bite', 'Umbrella', 'Phalanx', 'Scorpio', 'Banshee', 'Onyx', 'Basilisk', 'Sapphire'],
 				['Umbrella', 'Cerberus', 'Dire Wolf', 'Meltdown', 'Stormy Winter', 'Spearhead', 'Leviathan', 'Sapphire', 'Snake Bite', 'Life Jacket'],
 				['Kodiak', 'Tsunami', 'Ricochet', 'Stormy Winter', 'Anvil', 'Onyx', 'Dire Wolf', 'Meltdown', 'Banshee', 'Wildfire'],
-				['Albatross', 'Umbrella', 'Dire Wolf', 'Perseus', 'Scorpio', 'Tsunami', 'Life Jacket', 'Banshee', 'Stormy Winter', 'Cavalry'],
+				['Albatross', 'Umbrella', 'Dire Wolf', 'Perseus', 'Scorpio', 'Tsunami', 'Life Jacket', 'Banshee', 'Stormy Winter', 'Cavalry']
 			  ];
 			//Empty
 			var missions = [
@@ -177,7 +239,7 @@
 				['', '', '', '', '', '', '', '', '', ''],
 				['', '', '', '', '', '', '', '', '', ''],
 				['', '', '', '', '', '', '', '', '', ''],
-				['', '', '', '', '', '', '', '', '', ''],
+				['', '', '', '', '', '', '', '', '', '']
 				];
 			 */
 			//21-01-2021 Post-Patch
@@ -187,7 +249,7 @@
 				['Umbrella', 'Cerberus', 'Stormy Winter', 'Snake Bite', 'Hydra', 'Cavalry', 'Watchdog', 'Quarterback', 'Meltdown', 'Ricochet'],
 				['Basilisk', 'Leviathan', 'Watchdog', 'Spearhead', 'Kodiak', 'Prometheus', 'Anvil', 'Snake Bite', 'Cavalry', 'Umbrella'],
 				['Perseus', 'Ghost Hunter', 'Zero Hour', 'Quarterback', 'Tsunami', 'Life Jacket', 'Frostbite', 'Banshee', 'Hydra', 'Sapphire'],
-				['Dire Wolf', 'Basilisk', 'Frostbite', 'Scorpio', 'Meltdown', 'Onyx', 'Banshee', 'Perseus', 'Watchdog', 'Starry Night'],
+				['Dire Wolf', 'Basilisk', 'Frostbite', 'Scorpio', 'Meltdown', 'Onyx', 'Banshee', 'Perseus', 'Watchdog', 'Starry Night']
 				];
 			var row;
 			var column;
@@ -263,6 +325,9 @@
 			body {
 				font-family: sans-serif;
 			}
+			label {
+				font-size: 0.9em;
+			}
 			.favorite {
 				background-image: url('data:image/png;base64,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NQUE5OTRQAUUUUAFTRzdm/OoaKALtFVo5SnB5FWAQRkdKAFooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKOlIWCjJNVpJS/HQUAPkmzwvT1qGiigAooooAKKKKACiiigApyOUPHT0ptFAFtXDjIp1U1Yqcg1ZjkD+x9KAH0UUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABTXcIOevpTZJQnA5NVySxyetACu5c5NNoooAKKKKACiiigAooooAKKKKACiiigAo6UUUAWI5s8N19alqlU0MhJ2nmgCeiiigAooooAKKKKACiiigAooooAKKKKACoZJuy/nTZZCSVHAqKgAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACpoByW/CoatRDEY9+aAH0UUUAFFFFABRRRQAUUUUAFFFFABRRRQBXnGHz61FVicZTPpVegAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAFAyQPWrgGBiq0IzJ9Ks0AFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAIw3KR61Tq7VWUbZD+dADKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigCxAMKT61LTUG1AKdQAUUUUAFFFFABTHkCDnr6UySbHC9fWoCcnJoAtJIHHHX0p9UgSDkVPHNnhuvrQBNRRRQAUUUUAFQXA6N+FT0yUZjPtzQBVooooAKKKKACiiigAooooAKKKKACiiigAooooAKcg3OBTamgHzE+lAE9FFFABRRTHlCcdT6UAOZgoyTVd5S/A4FMZixyTSUAFFFFABRRRQBJHKU4PIqwGDDIOap0qsVOQaALlFMSQP7H0p9ABRRRQBTYbWI9KSpJxh8+tR0AFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFWYRiMe9VgMnFXAMAD0oAWjpTWcIMmq7yF/YelAD5Juy/nUNFFABRRRQAUUUUAFFFFABRRRQAVPHN2b86gooAu0VVSUpx1HpVlWDDINAEc4ygPpVerjDcpFU6ACiiigAooooAKKKKACiiigAooooAKKKKAJIRmQe3NSySheByarhioOO9JQApJY5JyaSiigAooooAKKKKACiiigAooooAKKKKACiiigApVYqcg0lFAFlJQ/B4NQSDbIRTaVmLYzQAlFFFABRRRQAUUUUAf/2S6Uk7YAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMDEtMjBUMjA6MzE6MjUrMDA6MDCfOfPlAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIxLTAxLTIwVDIwOjMxOjI1KzAwOjAw7mRLWQAAABp0RVh0ZXhpZjpCaXRzUGVyU2FtcGxlADgsIDgsIDgS7T4nAAAAEXRFWHRleGlmOkNvbG9yU3BhY2UAMQ+bAkkAAAAhdEVYdGV4aWY6RGF0ZVRpbWUAMjAyMTowMToyMCAyMTozMTowMzTeEwsAAAATdEVYdGV4aWY6RXhpZk9mZnNldAAxOTBMjvPCAAAAFHRFWHRleGlmOkltYWdlTGVuZ3RoADUxMo2F0bQAAAATdEVYdGV4aWY6SW1hZ2VXaWR0aAA1MTJe+cE5AAAAGnRFWHRleGlmOlNvZnR3YXJlAEdJTVAgMi4xMC4yMuge5+4AAAAkdEVYdGV4aWY6dGh1bWJuYWlsOkJpdHNQZXJTYW1wbGUAOCwgOCwgOCAb9FMAAAAcdEVYdGV4aWY6dGh1bWJuYWlsOkNvbXByZXNzaW9uADb5ZXBXAAAAHnRFWHRleGlmOnRodW1ibmFpbDpJbWFnZUxlbmd0aAAyNTZQcDADAAAAHXRFWHRleGlmOnRodW1ibmFpbDpJbWFnZVdpZHRoADI1NogG+hQAAAAodEVYdGV4aWY6dGh1bWJuYWlsOkpQRUdJbnRlcmNoYW5nZUZvcm1hdAAzMTZbUp8FAAAAL3RFWHRleGlmOnRodW1ibmFpbDpKUEVHSW50ZXJjaGFuZ2VGb3JtYXRMZW5ndGgAMjIwNF47+gIAAAAqdEVYdGV4aWY6dGh1bWJuYWlsOlBob3RvbWV0cmljSW50ZXJwcmV0YXRpb24ANhIVihoAAAAgdEVYdGV4aWY6dGh1bWJuYWlsOlNhbXBsZXNQZXJQaXhlbAAz4dfNWgAAAABJRU5ErkJggg==');
 				background-repeat: no-repeat;
@@ -283,7 +348,6 @@
 				border-collapse: collapse;
 				margin: 25px 0;
 				font-size: 0.9em;
-				min-width: 1100px;
 				border-radius: 5px;
 				overflow: hidden;
 				box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
@@ -306,11 +370,17 @@
 			.styled-table tbody tr td:last-of-type {
 				border-right: none;
 			}
-			.styled-table tbody tr:last-of-type td {
+			.styled-table tbody tr:nth-last-child(2) {
 				border-top: 2px solid #222222;
+			}
+			.styled-table tbody tr:last-of-type td,
+			.styled-table tbody tr:nth-last-child(2) td {
 				background-color: #f3f3f3;
 				color: #333333;
 				border-right: none;
+			}
+			.styled-table tbody tr:nth-last-child(3) td {
+				border-bottom: 2px solid #000000;
 			}
 			.styled-table tbody tr.active-row {
 				font-weight: bold;
@@ -385,8 +455,14 @@
 			}
 		</style>
 </head>
-<body onload="loadOffset();startUpdate();loadFavorites();">
-	<table class="styled-table">
+<body onload="loadOffset();startUpdate();loadFavorites();loadColumns();">
+	<input type="checkbox" id="show-column-2" name="show-column-2" value="show-column-2" onchange="toggleColumn(2);"><label for="show-column-2">T1-3 Standard</label>
+	<input type="checkbox" id="show-column-3" name="show-column-3" value="show-column-3" onchange="toggleColumn(3);"><label for="show-column-3">T1-3 Hardcore</label>
+	<input type="checkbox" id="show-column-4" name="show-column-4" value="show-column-4" onchange="toggleColumn(4);"><label for="show-column-4">T4-6 Standard</label>
+	<input type="checkbox" id="show-column-5" name="show-column-5" value="show-column-5" onchange="toggleColumn(5);"><label for="show-column-5">T4-6 Hardcore</label>
+	<input type="checkbox" id="show-column-6" name="show-column-6" value="show-column-6" onchange="toggleColumn(6);"><label for="show-column-6">T7-10 Standard</label>
+	<input type="checkbox" id="show-column-7" name="show-column-7" value="show-column-7" onchange="toggleColumn(7);"><label for="show-column-7">T7-10 Hardcore</label>
+	<table id="pve" class="styled-table">
 		<thead>
 		<tr>
 			<th>Start
@@ -909,16 +985,12 @@
 					<img style="vertical-align: text-bottom;" width="16" height="16" src=" data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAABhWlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw1AUhU9TpSIVQSuIOGSoThZEpThKFYtgobQVWnUweekfNGlIUlwcBdeCgz+LVQcXZ10dXAVB8AfEzc1J0UVKvC8ptIjxwuN9nHfP4b37AKFRYarZNQmommWk4jExm1sVA6/wIYQhRDEgMVNPpBcz8Kyve+qmuovwLO++P6tPyZsM8InEc0w3LOIN4uimpXPeJw6xkqQQnxNPGHRB4keuyy6/cS46LPDMkJFJzROHiMViB8sdzEqGSjxDHFZUjfKFrMsK5y3OaqXGWvfkLwzmtZU012mNIo4lJJCECBk1lFGBhQjtGikmUnQe8/CPOP4kuWRylcHIsYAqVEiOH/wPfs/WLExPuUnBGND9YtsfY0BgF2jWbfv72LabJ4D/GbjS2v5qA5j9JL3e1sJHQP82cHHd1uQ94HIHGH7SJUNyJD8toVAA3s/om3LA4C3Qu+bOrXWO0wcgQ7NavgEODoHxImWve7y7p3Nu//a05vcDqaFyvQwnuzYAAAAGYktHRAD/AAAAADMnfPMAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAHdElNRQflARQVNi9QZgReAAAAGXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAAAAtJREFUCNdjYAACAAAFAAHiJgWbAAAAAElFTkSuQmCC" alt="empty">
 				</span>
 		<tr>
-			<td>Offset
-			<td>
 			<td>Minutes
-			<td><input type="number" id="minutes" name="minutes" min="-60" max="60" value="0" size="3" onchange="saveOffset();">
+			<td class="offset" colspan="7"><input type="number" id="minutes" name="minutes" min="-60" max="60" value="0" size="3" onchange="saveOffset();">
+		<tr>
 			<td>Seconds
-			<td><input type="number" id="seconds" name="seconds" min="-60" max="60" value="0" size="3" onchange="saveOffset();">
-			<td>
-			<td>
+			<td class="offset" colspan="7"><input type="number" id="seconds" name="seconds" min="-60" max="60" value="0" size="3" onchange="saveOffset();">
 	</table>
-	<a href="/elite"><img src=" data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9oGDxEDMc9F6qEAAAHPSURBVDjLrZNNa+JQFIafSFpxEdIu2mDFVRP6j9pFoXRZ/FOCCG7tvzEtpAZRCrFNhEjU3Jwzi8EMjs5sZs7mfsB5znnPfS/8Y1i/X7y+viIiqCpVVQGgqvX68PDwZ8B4PEZV8TyPdrtNq9WiLEvyPOf9/Z31eo2I8Pj4eAwYj8eICEEQcHNzw/f3N3meY4yh2Wziui6TyYQkSRARnp6efgH2ybe3t3Q6HaIoYrfboarYto2qYozh+vqaMAzJsgxV5fn5mQaAiOC6Lp7n8fHxgTEGYwxlWVIUBZvNBmMM0+kU3/epqqqei72X4HkeSZJQFAWfn58nJ+44Dmma0u12mc1mh4Dz83OWyyXGGO7v7/UUYDQaWdvtlk6nQxzHAD8lGGPYbDa17r+FiByc7f37ZlnG2dkZ6/Wa0WhknTSNZXFxccFyuaw90tgD4jjGcRy22y3NZvMoWVVRVS4vL1ksFnWnNcC2baIoIggCjDE0Go2DtlWVu7s7wjCkLMtjIw2HQ1SVVquF7/ukacrX1xdVVXF1dYXrury9vbFarQB4eXk5tvJgMKirtdttHMcBYLVaMZ/Pa9375JOfqd/vIyJYloWIUFVVvRcRer0e/zV+AGk+Hfw14Z+3AAAAAElFTkSuQmCC" alt="less"></a> 
 	<a href="https://github.com/GoldenGnu/armored-warfare-pve-tracker"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAACSVBMVEUiKC4kKi4kKi8iKi4VIh0VHSoZJx8ZISAjKi8jJy4kKi0kKS0lKS4qLSkjKCwjKC4jKS0gKS4AAAAjLCwgJi4mLCUjKi0kKC4kKiwjKC0lKC4jKC8kKSwkKC0YJi0ZKTIAMDkXITEiKC8jKSwjKi4iKC0hKCwjKC8iKSwjKS0jKS0kKS0kKS4jKC0iKSwjKi8hKS0iKS0eJykjKC0jKS0jKC0jKS0eJisiKSwfKCkjKS0jKS0kKS0jKC0fJykjKC0jKC0jKC0jKS0kKS0kKS0jKS4jKS4jKS0jKC0jKS0iKCwjKS0jKC4hKi0iKSwkKSwkKiYiKS4iJy4jKC4iKSwjKC0jKC0kKS4OGSIkKi8lKi4kKS0jKS4jKC0jKS0jKC4iJy4iKC0jKS0kKS0kKSwjKS4jKC0jKS0jKS0jKS4kKS4jKS4gKC0iKS4mKComIy8jKi0kLCwkKS0jKC4hJy4jKC4jKDAkMCskIDEkKS4jKS0kKS0jKS0jKS0kKS4kKiwjKC0jKC0jKS0jKS4fKS4kLC4kKC4kKS4jKC4iKS4jKC0jKS0kKC4jKC4jKS0kKC4kKS4jKC4iKC4jKS4iKC0jKC4jKC0kKC0kKS0jKS0kKS4jKC4eKC0jKS0jKC0jKS0kKC4nKiwVJDMjKC4jKC4jKS4fKC8iKC4dKC8jKC4kKS4kKC0kKS0kKS4jKC4fJy8iKS4hKC8jKC4jKC4jKC0jKSwjKi4jKS4jKC4hKC4kKS0kKC4kKS4jKS4kKC0jKC4jKC0jKS3///9tc+XcAAAAunRSTlMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIDOaHf/f2kOgMCAguX/P6YCwIKtv7+tgrEYMr119T1z1y4lz73kg4VBgQVEIw9oZMEAQEBBYmg3vgpAwIBAQIDHvLe++MKAQEBAQf76g4CAQEBAQvmSgUCAkH32iYBAQIjoTyFqLcuLaft+z6cKYvHHiX5+JkIwdQ9LwQBDuy2CgIIm/EPDvKYCwICAz+OCQiGPgICuquGAAAAAWJLR0TC/W++1AAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB+UBFBMAGRJNfAAAAAEbSURBVBjTARAB7/4AACYnASgpKissKi0uAi8wAwAxBDIzNLq7NTW7vDQ2NwU4AAY5Or07u7u9vL66PL89PgcACDO9P0BBQkNERUZHSL1JCQBKS7xMCk1OT1BRUgtTu0tUAFW8vVYMV1hZWg1bDlzAvF0AXrtfYA9hYmNkZWYQZ2i+aQBqvmtsEW1uEhJvcBNxQ79yAGq+c3QUdXYVd3h5Fnp7v3IAKru6fBB9fhcYf30ZgL+6aQApvIGCgwx+hIWGGodDwbyIAIm/iovBjI0bHI6PkL88kZIAF5PAlJWWlx0QmJm/msGbCwAenJ2en6Chog+jpLrBpaYfAKcgqKnBqqsdC6ytv66vIbAAIrGyC7O0tSMktre4F2a5JdLvaIQoxhNSAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIxLTAxLTIwVDE5OjAwOjEzKzAwOjAw/7LjMAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMS0wMS0yMFQxOTowMDoxMyswMDowMI7vW4wAAAAASUVORK5CYII=" alt="GitHub"> </a> 
 </body>
 </html>
