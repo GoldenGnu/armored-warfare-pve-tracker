@@ -31,7 +31,7 @@
 				}
 				var start = new Date((timeLeft - 180) * 1000).toISOString().substr(14, 5);
 				var end = new Date((timeLeft) * 1000).toISOString().substr(14, 5);
-				var time = new Date(d.getTime() + (timeLeft - 180) * 1000).toLocaleString().substr(10, 5);
+				var time = new Date(d.getTime() + (timeLeft - 180) * 1000).toLocaleString('en-GB').substr(12, 5);
 				if (n === i) {
 					document.getElementById("row"+i).className = "active-row";
 					document.getElementById("start"+i).innerHTML = end;
@@ -241,7 +241,7 @@
 		<thead>
 		<tr>
 			<th>Start
-			<th>Date
+			<th>Time
 			<th>T1-3 Standard
 			<th>T1-3 Hardcore
 			<th>T4-6 Standard
@@ -405,11 +405,11 @@
 			<td>
 				<label for="minutes">Offset Minutes</label> 
 			<td>
-				<input type="number" id="minutes" name="minutes" min="-60" max="60" value="0" onchange="saveOffset();">
+				<input type="number" id="minutes" name="minutes" min="-60" max="60" value="0" onchange="saveOffset();" required>
 			<td>
 				<label for="seconds">Offset Seconds</label>
 			<td>
-				<input type="number" id="seconds" name="seconds" min="-60" max="60" value="0" onchange="saveOffset();">
+				<input type="number" id="seconds" name="seconds" min="-60" max="60" value="0" onchange="saveOffset();" required>
 			<td colspan="2">
 				<input class="button" type="reset" value="Clear">
 				<input class="button" type="button" value="Load" onclick="load();">

@@ -29,7 +29,7 @@
 				}
 				var start = new Date((timeLeft - 180) * 1000).toISOString().substr(14, 5);
 				var end = new Date((timeLeft) * 1000).toISOString().substr(14, 5);
-				var time = new Date(d.getTime() + (timeLeft - 180) * 1000).toLocaleString().substr(10, 5);
+				var time = new Date(d.getTime() + (timeLeft - 180) * 1000).toLocaleString('en-GB').substr(12, 5);
 				if (n === i) {
 					document.getElementById("row"+i).className = "active-row";
 					document.getElementById("start"+i).innerHTML = end;
@@ -442,7 +442,7 @@
 		<thead>
 		<tr>
 			<th>Start
-			<th>Date
+			<th>Time
 			<th>T1-3 Standard
 			<th>T1-3 Hardcore
 			<th>T4-6 Standard
