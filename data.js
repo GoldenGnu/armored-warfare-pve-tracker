@@ -1,13 +1,13 @@
-//2021-01-23_12-40
+//2021-01-23_01-56
 var missions = [
-	['Phalanx', 'Meltdown', 'Cavalry', 'Sapphire', 'Hydra', 'Stormy Winter', 'Quarterback', 'Ricochet', 'Banshee', 'Snake Bite'],
-	['Rolling Thunder', 'Stormy Winter', 'Hydra', 'Banshee', 'Phalanx', 'Cavalry', 'Sapphire', 'Snake Bite', 'Anvil', 'Meltdown'],
-	['Spearhead', 'Quarterback', 'Snake Bite', 'Meltdown', 'Scorpio', 'Sapphire', 'Umbrella', 'Anvil', 'Watchdog', 'Basilisk'],
-	['Hydra', 'Cerberus', 'Cavalry', 'Snake Bite', 'Basilisk', 'Phalanx', 'Banshee', 'Prometheus', 'Quarterback', 'Stormy Winter'],
-	['Erebos', 'Kodiak', 'Meltdown', 'Ghost Hunter', 'Life Jacket', 'Hydra', 'Dire Wolf', 'Stormy Winter', 'Starry Night', 'Ricochet'],
-	['Raiding Party', 'Sapphire', 'Leviathan', 'Rolling Thunder', 'Red Opossum', 'Tsunami', 'Hydra', 'Harbringer', 'Snake Bite', 'Stormy Winter']
+	['Ricochet', 'Phalanx', 'Snake Bite', 'Meltdown', 'Quarterback', 'Banshee', 'Sapphire', 'Cavalry', 'Anvil', 'Stormy Winter'],
+	['Cerberus', 'Banshee', 'Life Jacket', 'Onyx', 'Snake Bite', 'Dire Wolf', 'Hydra', 'Sapphire', 'Watchdog', 'Rolling Thunder'],
+	['Spearhead', 'Cerberus', 'Prometheus', 'Phalanx', 'Anvil', 'Banshee', 'Kodiak', 'Snake Bite', 'Sapphire', 'Basilisk'],
+	['Cerberus', 'Banshee', 'Life Jacket', 'Onyx', 'Snake Bite', 'Dire Wolf', 'Hydra', 'Sapphire', 'Watchdog', 'Rolling Thunder'],
+	['Wildfire', 'Red Opossum', 'Raiding Party', 'Phalanx', 'Kodiak', 'Stormy Winter', 'Ricochet', 'Prometheus', 'Umbrella', 'Rolling Thunder'],
+	['Leviathan', 'Anvil', 'Erebos', 'Dire Wolf', 'Hydra', 'Harbinger', 'Snake Bite', 'Albatross', 'Banshee', 'Zero Hour']
 ];
-var minutesOffset = -3;
-var secondsOffset = 13;
-var date = '2021-01-23 12:40';
+var minutesOffset = 0;
+var secondsOffset = 11;
+var date = '2021-01-23 01:56';
 var editor = 'GoldenGnu';
