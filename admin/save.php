@@ -44,7 +44,7 @@
 
 	//Write rotation_lists.ini
 	$inifile = fopen("../rotation_lists.ini", "w");
-	fwrite($inifile, "#" . date("Y-m-d_h-i") . "\r\n");
+	fwrite($inifile, "#" . date("Y-m-d h:i") . "\r\n");
 	for ($column = 1; $column <= 6; $column++) {
 		switch ($column) {
 			case 1: fwrite($inifile, "[T1-3 Standard]\r\n"); break;
@@ -61,6 +61,36 @@
 		}
 	}
 	fclose($inifile);
+
+	//Write json
+	$jsonfile = fopen("../data.json", "w");
+	fwrite($jsonfile, "{\r\n"); //Start
+	fwrite($jsonfile, "	\"data\": {\r\n"); //Data class start
+	fwrite($jsonfile, "		\"minutesOffset\": " . $minutes . ",\r\n");
+	fwrite($jsonfile, "		\"secondsOffset\": " . $seconds . ",\r\n");
+	fwrite($jsonfile, "		\"date\": \"" . date("Y-m-d h:i") . "\",\r\n");
+	fwrite($jsonfile, "		\"editor\": \"" . $_SERVER['PHP_AUTH_USER'] . "\",\r\n");
+	fwrite($jsonfile, "		\"missions\": [\r\n");
+	for ($column = 1; $column <= 6; $column++) {
+		fwrite($jsonfile, "			[");
+		for ($row = 1; $row <= 10; $row++) {
+			$id = 'mission-' . $row . '-' . $column;
+			$data = filter_input(INPUT_POST, $id);
+			if ($row > 1) {
+				fwrite($jsonfile, ", ");
+			}
+			fwrite($jsonfile, "\"$data\"");
+		}
+		fwrite($jsonfile, "]");
+		if ($column < 6) {
+			fwrite($jsonfile, ",");
+		}
+		fwrite($jsonfile, "\r\n");
+	}
+	fwrite($jsonfile, "		]\r\n");
+	fwrite($jsonfile, "	}\r\n"); //Data class end
+	fwrite($jsonfile, "}\r\n"); //End
+	fclose($jsonfile);
 	//Done
 	header("Location: /admin");
 	die();
