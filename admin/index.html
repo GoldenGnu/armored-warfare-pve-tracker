@@ -47,7 +47,7 @@
 			document.getElementById("seconds").value = secondsOffset;
 			document.getElementById("minutes").value = minutesOffset;
 		}
-		function load() {
+		function loadData() {
 			var row;
 			var column;
 			for (column = 1; column <= 6; column++) {
@@ -59,6 +59,13 @@
 				}
 			}
 			document.getElementById('edited').innerHTML =  date  + ' ' + editor;
+		}
+		function resetData() {
+			var minutesOffset = document.getElementById("minutes").value;
+			var secondsOffset = document.getElementById("seconds").value;
+			document.getElementById("save-form").reset(); 
+			document.getElementById("minutes").value = minutesOffset;
+			document.getElementById("seconds").value = secondsOffset;
 		}
 		</script>
 		<style>
@@ -196,8 +203,8 @@
 			}
 		</style>
 </head>
-<body onload="loadOffset();startUpdate();load();">
-	<form action="save.php" method="post">
+<body onload="loadOffset();startUpdate();loadData();">
+	<form id="save-form" name="save-form" action="save.php" method="post">
 	<datalist id="missions">
 		<option value="Albatross">
 		<option value="Anvil">
@@ -405,14 +412,14 @@
 			<td>
 				<label for="minutes">Offset Minutes</label> 
 			<td>
-				<input type="number" id="minutes" name="minutes" min="-60" max="60" value="0" onchange="saveOffset();" required>
+				<input type="number" id="minutes" name="minutes" min="-60" max="60" value="0" required>
 			<td>
 				<label for="seconds">Offset Seconds</label>
 			<td>
-				<input type="number" id="seconds" name="seconds" min="-60" max="60" value="0" onchange="saveOffset();" required>
+				<input type="number" id="seconds" name="seconds" min="-60" max="60" value="0" required>
 			<td colspan="2">
-				<input class="button" type="reset" value="Clear">
-				<input class="button" type="button" value="Load" onclick="load();">
+				<input class="button" type="button" value="Clear"  onclick="resetData();">
+				<input class="button" type="button" value="Load" onclick="loadData();">
 				<input class="button" type="submit" value="Save">
 	</table>
 	<a href="https://github.com/GoldenGnu/armored-warfare-pve-tracker"><img style="margin-top: 6px; margin-bottom: 4px;"  title="GitHub" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAACSVBMVEUiKC4kKi4kKi8iKi4VIh0VHSoZJx8ZISAjKi8jJy4kKi0kKS0lKS4qLSkjKCwjKC4jKS0gKS4AAAAjLCwgJi4mLCUjKi0kKC4kKiwjKC0lKC4jKC8kKSwkKC0YJi0ZKTIAMDkXITEiKC8jKSwjKi4iKC0hKCwjKC8iKSwjKS0jKS0kKS0kKS4jKC0iKSwjKi8hKS0iKS0eJykjKC0jKS0jKC0jKS0eJisiKSwfKCkjKS0jKS0kKS0jKC0fJykjKC0jKC0jKC0jKS0kKS0kKS0jKS4jKS4jKS0jKC0jKS0iKCwjKS0jKC4hKi0iKSwkKSwkKiYiKS4iJy4jKC4iKSwjKC0jKC0kKS4OGSIkKi8lKi4kKS0jKS4jKC0jKS0jKC4iJy4iKC0jKS0kKS0kKSwjKS4jKC0jKS0jKS0jKS4kKS4jKS4gKC0iKS4mKComIy8jKi0kLCwkKS0jKC4hJy4jKC4jKDAkMCskIDEkKS4jKS0kKS0jKS0jKS0kKS4kKiwjKC0jKC0jKS0jKS4fKS4kLC4kKC4kKS4jKC4iKS4jKC0jKS0kKC4jKC4jKS0kKC4kKS4jKC4iKC4jKS4iKC0jKC4jKC0kKC0kKS0jKS0kKS4jKC4eKC0jKS0jKC0jKS0kKC4nKiwVJDMjKC4jKC4jKS4fKC8iKC4dKC8jKC4kKS4kKC0kKS0kKS4jKC4fJy8iKS4hKC8jKC4jKC4jKC0jKSwjKi4jKS4jKC4hKC4kKS0kKC4kKS4jKS4kKC0jKC4jKC0jKS3///9tc+XcAAAAunRSTlMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIDOaHf/f2kOgMCAguX/P6YCwIKtv7+tgrEYMr119T1z1y4lz73kg4VBgQVEIw9oZMEAQEBBYmg3vgpAwIBAQIDHvLe++MKAQEBAQf76g4CAQEBAQvmSgUCAkH32iYBAQIjoTyFqLcuLaft+z6cKYvHHiX5+JkIwdQ9LwQBDuy2CgIIm/EPDvKYCwICAz+OCQiGPgICuquGAAAAAWJLR0TC/W++1AAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB+UBFBMAGRJNfAAAAAEbSURBVBjTARAB7/4AACYnASgpKissKi0uAi8wAwAxBDIzNLq7NTW7vDQ2NwU4AAY5Or07u7u9vL66PL89PgcACDO9P0BBQkNERUZHSL1JCQBKS7xMCk1OT1BRUgtTu0tUAFW8vVYMV1hZWg1bDlzAvF0AXrtfYA9hYmNkZWYQZ2i+aQBqvmtsEW1uEhJvcBNxQ79yAGq+c3QUdXYVd3h5Fnp7v3IAKru6fBB9fhcYf30ZgL+6aQApvIGCgwx+hIWGGodDwbyIAIm/iovBjI0bHI6PkL88kZIAF5PAlJWWlx0QmJm/msGbCwAenJ2en6Chog+jpLrBpaYfAKcgqKnBqqsdC6ytv66vIbAAIrGyC7O0tSMktre4F2a5JdLvaIQoxhNSAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIxLTAxLTIwVDE5OjAwOjEzKzAwOjAw/7LjMAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMS0wMS0yMFQxOTowMDoxMyswMDowMI7vW4wAAAAASUVORK5CYII=" alt="GitHub"></a> 
