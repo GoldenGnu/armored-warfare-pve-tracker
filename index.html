@@ -32,7 +32,7 @@
 			var update = false;
 			for (i = 1; i < 11; i++) {
 			    var timeLeft = (i * 180) - seconds;
-				if (timeLeft <= 0)  {
+				if (timeLeft < 0)  {
 					timeLeft = timeLeft + 1800;
 				}
 				var start = new Date((timeLeft - 180) * 1000).toISOString().substr(14, 5);
