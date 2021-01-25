@@ -210,19 +210,19 @@
 			http(function(response) {
 				// Parse JSON string into object
 				jsonData = JSON.parse(response);
-			});
-			if (typeof jsonData === 'undefined' || jsonData === null) {
-				return;
-			}
-			var row;
-			var column;
-			for (column = 1; column <= 6; column++) {
-				for (row = 1; row <= 10; row++) {
-					var id = row +  '-' + column;
-					document.getElementById(id).innerHTML = jsonData.data.missions[column - 1][row - 1];
+				if (typeof jsonData === 'undefined' || jsonData === null) {
+					return;
 				}
-			}
-			document.getElementById('edited').innerHTML =  'Updated ' + jsonData.data.date +' by ' + jsonData.data.editor;
+				var row;
+				var column;
+				for (column = 1; column <= 6; column++) {
+					for (row = 1; row <= 10; row++) {
+						var id = row +  '-' + column;
+						document.getElementById(id).innerHTML = jsonData.data.missions[column - 1][row - 1];
+					}
+				}
+				document.getElementById('edited').innerHTML =  'Updated ' + jsonData.data.date +' by ' + jsonData.data.editor;
+			});
 		}
 		function http(callback) {
 			var xobj = new XMLHttpRequest();
