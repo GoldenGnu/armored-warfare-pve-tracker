@@ -211,8 +211,10 @@
 				// Parse JSON string into object
 				jsonData = JSON.parse(response);
 				if (typeof jsonData === 'undefined' || jsonData === null) {
+					console.log('Failed to load data from JSON');
 					return;
 				}
+				console.log('Data updated from JSON');
 				var row;
 				var column;
 				for (column = 1; column <= 6; column++) {
