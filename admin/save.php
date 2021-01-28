@@ -68,7 +68,7 @@
 	fwrite($jsonfile, "	\"data\": {\r\n"); //Data class start
 	fwrite($jsonfile, "		\"minutesOffset\": " . $minutes . ",\r\n");
 	fwrite($jsonfile, "		\"secondsOffset\": " . $seconds . ",\r\n");
-	fwrite($jsonfile, "		\"date\": \"" . date("Y-m-d h:i") . "\",\r\n");
+	fwrite($jsonfile, "		\"date\": \"" . date("Y-m-d H:i") . "\",\r\n");
 	fwrite($jsonfile, "		\"editor\": \"" . $_SERVER['PHP_AUTH_USER'] . "\",\r\n");
 	fwrite($jsonfile, "		\"missions\": [\r\n");
 	for ($column = 1; $column <= 6; $column++) {
