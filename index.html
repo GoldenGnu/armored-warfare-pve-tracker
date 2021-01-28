@@ -4,6 +4,8 @@
 	<title>Armored Warfare PvE Rotation Tracker</title>
 	<meta charset="UTF-8">
 	<link id="favicon" rel="shortcut icon" type="image/png" href=" data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACf0lEQVQ4jY2Ty08TYRTFz/2+mWk7Q2lpyktAHgFCjGh8xbhk4YLEtTujLl36T0g0JiYm/gmuXbhzgSYuxAhEMCYYRFBehWKbTtt5fvNdV1USUDnbm/vLuTfnAP8X/Wsoj90gIikNQ0opAfCJ6UIIYZiW1TUwOH724uW7hhSdbr2+VN4tfTwoba+6lZ/7cRgEWmt9BJC2HWfs3KWpkeGhe4VMNOWkOWPbKUSRQqSYvQAuzPzmyuq35+9fv3rIzAwABgAIKeX0zVtPJ8cGbxvkS0pcpAxGLt8OyzIRhoqyxfHc/OJqznFK1w67NgAAzJwkSvtBLIvdp9HT24dc1sRIbxamoRCoLGYezGBpfg6ZYn/jCICZ2TbERGlzDV+W5zA6MYnJC1exlXJgSgtPZu6jerAP2zahwVUhhJUkSQSAZevrmUKXFdb2b3R35qCCBrbWPqNarcGPgE8LbyAEADDqXjxfKZdXmDkkIiVaDgLP25RWG3oGz4CkifZCEW6tCrfmghMNBmA7FrPWXUR0HsAwM2eN1i21Snmn4KSxuLCIOIrQltlG38Awyvt7COMYliVgZ1JaSu7WWncDqACoihYg9H03CgPPMAyo0EUmbaJWc7Gz/QNxHEMQkGvPa51oArMPYAdA7TcArNE/Mnawt72OjrwN3wvQbDRwUC5DxQpKKbB0gq2N9Q/M/BbAdyJqyj8OvKZI2dTX23klCryM7wcACbiNEEGzglxHj56dffey2ag/IqINAAEAPhJlK5XuOTU0cndwoPeOkzZHv66XkM+KZHlp5ZnXbDwmol1mVsd24RBICinb03bbtBTiut9szCoVv2DmZivCJxURkSCiv1b6F/mJMFVr2FOjAAAAAElFTkSuQmCC" />
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300&family=Poppins&display=swap" rel="stylesheet"> 
 	<script src="https://aw.nikr.net/data.js"></script>
 	<script>
 		var jsonData = null;
@@ -208,11 +210,24 @@
 					} else {
 						tooltip = "tooltiptextdown";
 					}
+					var mode;
+					var border;
+					if(column % 2 === 0) {
+						mode = "HARDCORE";
+						border = "info-hardcore";
+					} else {
+						mode = "STANDARD";
+						border = "info-standard";
+					}
 					document.getElementById(info).classList.add("tooltip");
 					document.getElementById(id).innerHTML = missions[column - 1][row - 1];
 					document.getElementById(info).innerHTML =
 						'					<img style="vertical-align: text-bottom;" width="16" height="16" src=" data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAABhWlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw1AUhU9TpSIVQSuIOGSoThZEpThKFYtgobQVWnUweekfNGlIUlwcBdeCgz+LVQcXZ10dXAVB8AfEzc1J0UVKvC8ptIjxwuN9nHfP4b37AKFRYarZNQmommWk4jExm1sVA6/wIYQhRDEgMVNPpBcz8Kyve+qmuovwLO++P6tPyZsM8InEc0w3LOIN4uimpXPeJw6xkqQQnxNPGHRB4keuyy6/cS46LPDMkJFJzROHiMViB8sdzEqGSjxDHFZUjfKFrMsK5y3OaqXGWvfkLwzmtZU012mNIo4lJJCECBk1lFGBhQjtGikmUnQe8/CPOP4kuWRylcHIsYAqVEiOH/wPfs/WLExPuUnBGND9YtsfY0BgF2jWbfv72LabJ4D/GbjS2v5qA5j9JL3e1sJHQP82cHHd1uQ94HIHGH7SJUNyJD8toVAA3s/om3LA4C3Qu+bOrXWO0wcgQ7NavgEODoHxImWve7y7p3Nu//a05vcDqaFyvQwnuzYAAAAGYktHRAD/AAAAADMnfPMAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAHdElNRQflARQVNi9QZgReAAAAGXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAAAAtJREFUCNdjYAACAAAFAAHiJgWbAAAAAElFTkSuQmCC" alt="empty">'
-						+ '					<span class="' + tooltip + ' ' + missions[column - 1][row - 1].toLowerCase().replace(" ", "") +'"></span>\r\n';
+						+ '					<div class="' + tooltip + ' ' + border + ' ' + missions[column - 1][row - 1].toLowerCase().replace(" ", "") +'">\r\n'
+						+ '						<div class="info-operation">OPERATION</div>\r\n'
+						+ '						<div class="info-mode">(' + mode+ ')</div>\r\n'
+						+ '						<div class="info-name">' + missions[column - 1][row - 1] + '</div><br>\r\n'
+						+ '					</div>\r\n';
 					document.getElementById(info).style.float = 'right';
 					/*document.getElementById(info).style.display = 'block';*/
 					document.getElementById(info).style.marginLeft = '5px';
@@ -242,10 +257,23 @@
 						} else {
 							tooltip = "tooltiptextdown";
 						}
+						var mode;
+						var border;
+						if(column % 2 === 0) {
+							mode = "HARDCORE";
+							border = "info-hardcore";
+						} else {
+							mode = "STANDARD";
+							border = "info-standard";
+						}
 						document.getElementById(id).innerHTML = jsonData.data.missions[column - 1][row - 1];
 						document.getElementById(info).innerHTML =
 						'					<img style="vertical-align: text-bottom;" width="16" height="16" src=" data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAABhWlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw1AUhU9TpSIVQSuIOGSoThZEpThKFYtgobQVWnUweekfNGlIUlwcBdeCgz+LVQcXZ10dXAVB8AfEzc1J0UVKvC8ptIjxwuN9nHfP4b37AKFRYarZNQmommWk4jExm1sVA6/wIYQhRDEgMVNPpBcz8Kyve+qmuovwLO++P6tPyZsM8InEc0w3LOIN4uimpXPeJw6xkqQQnxNPGHRB4keuyy6/cS46LPDMkJFJzROHiMViB8sdzEqGSjxDHFZUjfKFrMsK5y3OaqXGWvfkLwzmtZU012mNIo4lJJCECBk1lFGBhQjtGikmUnQe8/CPOP4kuWRylcHIsYAqVEiOH/wPfs/WLExPuUnBGND9YtsfY0BgF2jWbfv72LabJ4D/GbjS2v5qA5j9JL3e1sJHQP82cHHd1uQ94HIHGH7SJUNyJD8toVAA3s/om3LA4C3Qu+bOrXWO0wcgQ7NavgEODoHxImWve7y7p3Nu//a05vcDqaFyvQwnuzYAAAAGYktHRAD/AAAAADMnfPMAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAHdElNRQflARQVNi9QZgReAAAAGXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAAAAtJREFUCNdjYAACAAAFAAHiJgWbAAAAAElFTkSuQmCC" alt="empty">'
-						+ '					<span class="' + tooltip + ' ' + jsonData.data.missions[column - 1][row - 1].toLowerCase().replace(" ", "") +'"></span>\r\n';
+						+ '					<div class="' + tooltip + ' ' + border + ' ' + jsonData.data.missions[column - 1][row - 1].toLowerCase().replace(" ", "") +'">\r\n'
+						+ '						<div class="info-operation">OPERATION</div>\r\n'
+						+ '						<div class="info-mode">(' + mode+ ')</div>\r\n'
+						+ '						<div class="info-name">' + jsonData.data.missions[column - 1][row - 1] + '</div><br>\r\n'
+						+ '					</div>\r\n';
 					}
 				}
 				document.getElementById('edited').innerHTML =  'Updated ' + jsonData.data.date +' by ' + jsonData.data.editor;
@@ -674,34 +702,60 @@
 			.tooltip {
 				position: relative;
 			}
+			.tooltip .info-operation {
+				margin-top: 10px;
+				font-size: 12px;
+				color: #e56605;
+				font-weight: normal;
+			}
+			.tooltip .info-mode {
+				margin-top: 3px;
+				font-size: 10px;
+				color: #e56605;
+				font-weight: normal;
+			}
+			.tooltip .info-name {
+				margin-top: 3px;
+				font-size: 10px;
+				color: #ffffff;
+				font-weight: normal;
+			}
+			.tooltip .info-hardcore {
+				border: 3px solid #e56605;
+			}
+			.tooltip .info-standard {
+				border: 3px solid #666457;
+			}
 			.tooltip .tooltiptextdown,
 			.tooltip .tooltiptextup {
+				line-height: 0.9;
 				visibility: hidden;
 				background-repeat: no-repeat;
-				/*border-radius: 5px;*/
+				text-align: center;
+				border-radius: 4px;
 				overflow: hidden;
+				font-family: 'Poppins', sans-serif;
 				/* Position the tooltip */
 				position: absolute;
 				z-index: 1;
 				/* fade */
 				transition: 0s;
 				opacity: 0;
-				
 			}
 			.tooltip .tooltiptextdown {
-				background-size: 100px 166px;
-				width: 100px;
-				height: 165px;
-				top: 28px;
-				left: -80px;
+				background-size: 116px 158px;
+				width: 116px;
+				height: 158px;
+				top: 29px;
+				left: -96px;
 				
 			}
 			.tooltip .tooltiptextup {
-				background-size: 100px 166px;
-				width: 100px;
-				height: 165px;
+				background-size: 116px 158px;
+				width: 116px;
+				height: 158px;
 				top: -177px;
-				left: -80px;
+				left: -96px;
 			}
 			.tooltip:hover>.tooltiptextup {
 				opacity: 1;
