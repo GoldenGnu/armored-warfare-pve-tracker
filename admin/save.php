@@ -9,7 +9,7 @@
 	copy("../data.js","../backup/" . $filename . ".js");
 	//Write data.js
 	$myfile = fopen("../data.js", "w");
-	fwrite($myfile, "//" . date("Y-m-d_h-i") . "\r\n");
+	fwrite($myfile, "//" . date("Y-m-d_H-i") . "\r\n");
 	fwrite($myfile, "var missions = [\r\n");
 	for ($column = 1; $column <= 6; $column++) {
 		fwrite($myfile, "	[");
@@ -38,13 +38,13 @@
 		$seconds = 0;
 	}
 	fwrite($myfile, "var secondsOffset = $seconds;\r\n");
-	fwrite($myfile, "var date = '". date("Y-m-d h:i") ."';\r\n");
+	fwrite($myfile, "var date = '". date("Y-m-d H:i") ."';\r\n");
 	fwrite($myfile, "var editor = '". $_SERVER['PHP_AUTH_USER'] ."';\r\n");
 	fclose($myfile);
 
 	//Write rotation_lists.ini
 	$inifile = fopen("../rotation_lists.ini", "w");
-	fwrite($inifile, "#" . date("Y-m-d h:i") . "\r\n");
+	fwrite($inifile, "#" . date("Y-m-d H:i") . "\r\n");
 	for ($column = 1; $column <= 6; $column++) {
 		switch ($column) {
 			case 1: fwrite($inifile, "[T1-3 Standard]\r\n"); break;
