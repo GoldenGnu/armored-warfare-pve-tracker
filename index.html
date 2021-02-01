@@ -12,9 +12,12 @@
 		function startUpdate() {
 			loadDataJS();
 			updateTime();
-			var intervalId = window.setInterval(function(){
+			var timeUpdate = window.setInterval(function(){
 				updateTime();
 			}, 1000);
+			var intervalId = window.setInterval(function(){
+				loadJsonData();
+			}, 60000);
 		}
 		function updateTime() {
 			var d = new Date();
@@ -239,12 +242,18 @@
 		function loadJsonData() {
 			http(function(response) {
 				// Parse JSON string into object
-				jsonData = JSON.parse(response);
-				if (typeof jsonData === 'undefined' || jsonData === null) {
+				var json = JSON.parse(response);
+				if (typeof json === 'undefined' || json === null) {
 					console.log('Failed to load data from JSON');
 					return;
 				}
 				console.log('Data updated from JSON');
+				if (typeof jsonData !== 'undefined' && jsonData !== null && !jsonData.data.date.localeCompare(json.data.date)) {
+					console.log('	Skipping Update (nothing changed)');
+					return;
+				}
+				console.log('	Updating Data');
+				jsonData = json;
 				var row;
 				var column;
 				for (column = 1; column <= 6; column++) {
@@ -277,6 +286,7 @@
 					}
 				}
 				document.getElementById('edited').innerHTML =  'Updated ' + jsonData.data.date +' by ' + jsonData.data.editor;
+				loadFavorites();
 			});
 		}
 		function http(callback) {
