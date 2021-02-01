@@ -10,6 +10,7 @@
 	<script>
 		var jsonData = null;
 		function startUpdate() {
+			loadUserOffset();
 			loadDataJS();
 			updateTime();
 			var timeUpdate = window.setInterval(function(){
@@ -22,10 +23,12 @@
 		function updateTime() {
 			var d = new Date();
 			var seconds;
+			var userMinutesOffset = document.getElementById("minutes").value;
+			var userSecondsOffset = document.getElementById("seconds").value;
 			if (typeof jsonData !== 'undefined' && jsonData !== null) { //Load from data.json
-				seconds = (d.getUTCMinutes() * 60) + d.getUTCSeconds() - jsonData.data.secondsOffset - (jsonData.data.minutesOffset * 60);
+				seconds = (d.getUTCMinutes() * 60) + d.getUTCSeconds() - jsonData.data.secondsOffset - userMinutesOffset - (jsonData.data.minutesOffset * 60) - (userMinutesOffset * 60);
 			} else { //Load from data.js
-				seconds = (d.getUTCMinutes() * 60) + d.getUTCSeconds() - secondsOffset - (minutesOffset * 60);
+				seconds = (d.getUTCMinutes() * 60) + d.getUTCSeconds() - secondsOffset - userSecondsOffset - (minutesOffset * 60) - (userMinutesOffset * 60);
 			}
 			if (seconds > 1800)  {
 				seconds = seconds - 1800;
@@ -58,6 +61,38 @@
 			}
 			if (update) {
 				loadJsonData();
+			}
+		}
+		function loadUserOffset() {
+			if (typeof(Storage) !== "undefined") {
+				var seconds = localStorage.getItem('seconds');
+				if(seconds === null) {
+					document.getElementById("seconds").value = 0;
+				} else {
+					document.getElementById("seconds").value = seconds;
+				}
+				var minutes = localStorage.getItem('minutes');
+				if(minutes === null) {
+					document.getElementById("minutes").value = 0;
+				} else {
+					document.getElementById("minutes").value = minutes;
+				}
+			} else {
+				console.log("Storage not supported");
+			}
+		}
+		function saveUserOffset() {
+			var userMinutesOffset = document.getElementById("minutes").value;
+			var userSecondsOffset = document.getElementById("seconds").value;
+			if (typeof(Storage) !== "undefined") {
+				if(!isNaN(userSecondsOffset) && typeof userSecondsOffset !== 'undefined' && userSecondsOffset !== null && userSecondsOffset !== ''){
+					localStorage.setItem('seconds', userSecondsOffset);
+				}
+				if(!isNaN(userMinutesOffset) && typeof userMinutesOffset !== 'undefined' && userMinutesOffset !== null && userMinutesOffset !== ''){
+					localStorage.setItem('minutes', userMinutesOffset);
+				}
+			} else {
+				console.log("Storage not supported");
 			}
 		}
 		function toggle(id) {
@@ -513,6 +548,13 @@
 				padding: 2px 5px;
 			}
 			#settings input {
+				height: 13px;
+				vertical-align: top;
+				margin-left: 10px;
+			}
+			#settings label:nth-last-of-type(1),
+			#settings label:nth-last-of-type(2) {
+				display: inline-block;
 				height: 13px;
 				vertical-align: top;
 				margin-left: 10px;
@@ -1509,6 +1551,8 @@
 		<input type="checkbox" id="show-column-5" name="show-column-5" value="show-column-5" onchange="toggleColumn(5);"><label for="show-column-5">3-6 Hardcore</label>
 		<input type="checkbox" id="show-column-6" name="show-column-6" value="show-column-6" onchange="toggleColumn(6);"><label for="show-column-6">7-10 Standard</label>
 		<input type="checkbox" id="show-column-7" name="show-column-7" value="show-column-7" onchange="toggleColumn(7);"><label for="show-column-7">7-10 Hardcore</label>
+		<label for="minutes">Offset Minutes <input type="number" id="minutes" name="minutes" min="-60" max="60" value="0" onchange="saveUserOffset();" required></label>
+		<label for="seconds">Offset Seconds <input type="number" id="seconds" name="seconds" min="-60" max="60" value="0" onchange="saveUserOffset();" required></label>
 	</div>
 	
 	<img id="hide-downloads" title="Hide Downloads" style="cursor: pointer; margin-top: 6px; margin-bottom: 4px; display: none;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAADCnpUWHRSYXcgcHJvZmlsZSB0eXBlIGV4aWYAAHja7ZdbstwqDEX/GUWGgCSExHAwmKrMIMPPxq/066TOrdv5a1MGLPAWaMl0dVh//RzhBy4qziGpeS45R1yppMIVHY/7VbeaYtrq4yGenTt7uAYYJkEr+6PnY/5pp3inRBU9vRHydgws9wMlHfr+IMR7I3NFs98PoXIICe8DdAjUfVsxF7fbLSzr3vZzJ77fYVbJ75f99GyIXlf4EeZVSCJqFt4XIPOmIBUdQs1SePYEfYVtsxxiCMirOMWbVYVHKlePvrA/QJG82wMM98HMV/vSTvpgPwTDFuIbz9Iuz3d2a5eLuyDPe4zuYYx1311NGSHNx6bOrWw9TFwQctleyyiGW9G3rRQUD8jeBuQ9trigNCrEwDIoUadKg9atbdSwxMQrG1rmBlDT5mJcuEkM4JRmocEmRbo4aDXgFVj5WgttfsvmrpHDcSfMZIIYzVQIs3pH+VJojJnyRNGvWGFdPJMQy5jkZo1ZAELjzCPdAnyWx2tyFRDULcyODda47BKL0pFbM49kAy2YqGj3b42sHwIIEXwrFkMCAjGTKGWKxmxEiKODT4WQsyRegIBUuWOVnEQy4DhP33jHaJvLyrsZZxZAqGQxoClSwSrhYEP+WHLkUFXRpKpZTV2L1iw5Zc05W56HXzWxZGrZzNyKVRdPrp7d3IMXr4WL4HDUkosVL6XUCqcVyhVvV0yodeFFlrTokhdbfClLbUiflpq23Kx5aKXVzl06zomeu3XvpdeVVqTSmlZd82qrr2WtA6k2ZKShIw8bPsqoFzUKO9an8n1qdFLjjdScaBc1vGp2StA8TnQyAzFOBOI2CSCheTKLTilxmOgms1gYX4UyVqkTTqdJDATTSqyDLnZ/yN1xCyn9L258kgsT3TvIhYnuC3LP3F5Q6/PXpkUJG6H5Gc6gRsHnhwmrV/Y6f9S+3Yb/+sJH6CP0EfoI/QuhsYxwnmHDXw3/ZfShDe/Y1i5045e/7f+5De9Zz0foI/Serw3/jnoJvwEZiKkg2SErhAAAASVpQ0NQSUNDIHByb2ZpbGUAAHicnZC/SsNQFMZ/raIidVIcRCGDg0vBxU4u/sHQoVDbCEan9KbFYBJDklJ8A99EH6aDIPgGvoCCs9+NDg5m8cDh/Dic8333XGg6sUmKxX1I0jJ3B0f+pX/lLL/RYIcWbfYCU2S94ZlHbXy+alrx0rZa9XN/xlI4LozqXJmaLC+hcSjuzMrMspKNW29wIn4QO2GShuIn8W6YhJbt7iCJp+ZH076mNU4vhrav3MalS48+DiOmRMSUui0iVeeUDgeqLjkB9xQY1ZixejPNlNyICim5HIs8kV5T47dV+fXlMpJGJC3rcEciTeuH/d/vtY/zarOxOc+CPKhaC8rmZALvj7Dmw/ozrF7XeK38vq1mplPN/PPGL0AvUJHea2/9AAAPnGlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNC40LjAtRXhpdjIiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgeG1sbnM6aXB0Y0V4dD0iaHR0cDovL2lwdGMub3JnL3N0ZC9JcHRjNHhtcEV4dC8yMDA4LTAyLTI5LyIKICAgIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIgogICAgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIKICAgIHhtbG5zOnBsdXM9Imh0dHA6Ly9ucy51c2VwbHVzLm9yZy9sZGYveG1wLzEuMC8iCiAgICB4bWxuczpHSU1QPSJodHRwOi8vd3d3LmdpbXAub3JnL3htcC8iCiAgICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iCiAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIKICAgeG1wTU06RG9jdW1lbnRJRD0iZ2ltcDpkb2NpZDpnaW1wOjY1MzkyOTk5LWYwYjQtNGM5Yy04OWNkLTE3OWE0Y2NhNDRjNiIKICAgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo3M2YyOWViMy04YmNmLTRmYWUtOTc0MC00NDU5ZjkxYTAwYzciCiAgIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpiMzhhYjBkOS1jNTA2LTRiNzUtOWZlOC05ZTY4MzlkN2U3ZDUiCiAgIEdJTVA6QVBJPSIyLjAiCiAgIEdJTVA6UGxhdGZvcm09IldpbmRvd3MiCiAgIEdJTVA6VGltZVN0YW1wPSIxNjExOTI0NjMwMTQ3MTc3IgogICBHSU1QOlZlcnNpb249IjIuMTAuMjIiCiAgIGRjOkZvcm1hdD0iaW1hZ2UvcG5nIgogICB0aWZmOk9yaWVudGF0aW9uPSIxIgogICB4bXA6Q3JlYXRvclRvb2w9IkdJTVAgMi4xMCI+CiAgIDxpcHRjRXh0OkxvY2F0aW9uQ3JlYXRlZD4KICAgIDxyZGY6QmFnLz4KICAgPC9pcHRjRXh0OkxvY2F0aW9uQ3JlYXRlZD4KICAgPGlwdGNFeHQ6TG9jYXRpb25TaG93bj4KICAgIDxyZGY6QmFnLz4KICAgPC9pcHRjRXh0OkxvY2F0aW9uU2hvd24+CiAgIDxpcHRjRXh0OkFydHdvcmtPck9iamVjdD4KICAgIDxyZGY6QmFnLz4KICAgPC9pcHRjRXh0OkFydHdvcmtPck9iamVjdD4KICAgPGlwdGNFeHQ6UmVnaXN0cnlJZD4KICAgIDxyZGY6QmFnLz4KICAgPC9pcHRjRXh0OlJlZ2lzdHJ5SWQ+CiAgIDx4bXBNTTpIaXN0b3J5PgogICAgPHJkZjpTZXE+CiAgICAgPHJkZjpsaQogICAgICBzdEV2dDphY3Rpb249InNhdmVkIgogICAgICBzdEV2dDpjaGFuZ2VkPSIvIgogICAgICBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjczNTk1NzFiLWFiZjYtNDA1ZS1hY2MzLTA0ZTYwZDJhYmQyZSIKICAgICAgc3RFdnQ6c29mdHdhcmVBZ2VudD0iR2ltcCAyLjEwIChXaW5kb3dzKSIKICAgICAgc3RFdnQ6d2hlbj0iMjAyMS0wMS0yOVQxMzo1MDozMCIvPgogICAgPC9yZGY6U2VxPgogICA8L3htcE1NOkhpc3Rvcnk+CiAgIDxwbHVzOkltYWdlU3VwcGxpZXI+CiAgICA8cmRmOlNlcS8+CiAgIDwvcGx1czpJbWFnZVN1cHBsaWVyPgogICA8cGx1czpJbWFnZUNyZWF0b3I+CiAgICA8cmRmOlNlcS8+CiAgIDwvcGx1czpJbWFnZUNyZWF0b3I+CiAgIDxwbHVzOkNvcHlyaWdodE93bmVyPgogICAgPHJkZjpTZXEvPgogICA8L3BsdXM6Q29weXJpZ2h0T3duZXI+CiAgIDxwbHVzOkxpY2Vuc29yPgogICAgPHJkZjpTZXEvPgogICA8L3BsdXM6TGljZW5zb3I+CiAgPC9yZGY6RGVzY3JpcHRpb24+CiA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgCjw/eHBhY2tldCBlbmQ9InciPz5BiBgXAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQflAR0MMh4LKxYVAAAA3klEQVQoz2XRPU4DMRAF4M92sh1/Eg1XoAgCQR3lApHoqaiQOAAtNR03ooAKOkq6LWggESAhUcCawmGzG/wKe97MPHv8WK6AKNLuoZABWRLxLdvEmyBoliVJELHnTq12a0RRC0g4dOXaXF7gw6hkgoQLn23qDzelIOHIy7909mSDaIBj24tJ1qy3U+3YLYeTTtfQsBO92ue8J1+petfc89wG00wUM9OWm+n1j7PMuMPMugpZNjHpxQ+rb+hj7iDg1KWf8u8iGmSV2pnHIGoMbAn0nP3yLhSzWmtXrE8Sv39ngAp3gVMQAAAAAElFTkSuQmCC" alt="Downloads" onclick="toggle('downloads');">
