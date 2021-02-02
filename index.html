@@ -9,6 +9,7 @@
 	<script src="https://aw.nikr.net/data.js"></script>
 	<script>
 		var jsonData = null;
+		var eTag = null;
 		function startUpdate() {
 			loadUserOffset();
 			loadDataJS();
@@ -279,15 +280,10 @@
 				// Parse JSON string into object
 				var json = JSON.parse(response);
 				if (typeof json === 'undefined' || json === null) {
-					console.log('Failed to load data from JSON');
+					console.log('	Failed to load data from JSON');
 					return;
 				}
-				console.log('Data updated from JSON');
-				if (typeof jsonData !== 'undefined' && jsonData !== null && !jsonData.data.date.localeCompare(json.data.date)) {
-					console.log('	Skipping Update (nothing changed)');
-					return;
-				}
-				console.log('	Updating Data');
+				console.log('	Data updating from JSON');
 				jsonData = json;
 				var row;
 				var column;
@@ -325,12 +321,20 @@
 			});
 		}
 		function http(callback) {
+			console.log('Loading JSON:');
 			var xobj = new XMLHttpRequest();
 			xobj.overrideMimeType("application/json");
 			xobj.open('GET', 'https://aw.nikr.net/data.json', true);
+			if (eTag !== null) {
+				xobj.setRequestHeader('If-None-Match', eTag);
+			}
 			// Replace 'my_data' with the path to your file
 			xobj.onreadystatechange = function() {
+				if (xobj.status === 304) {
+					console.log('	Skipping JSON update (ETag)');
+				}
 				if (xobj.readyState === 4 && xobj.status === 200) {
+					eTag = xobj.getResponseHeader('ETag');
 					// Required use of an anonymous callback 
 					// as .open() will NOT return a value but simply returns undefined in asynchronous mode
 					callback(xobj.responseText);
