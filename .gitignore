@@ -2,3 +2,4 @@
 admin/.htaccess
 admin/.htpasswd
 .htaccess
+/resources/
