@@ -255,15 +255,11 @@
 			var row = parseInt(arr[0]);
 			var column = parseInt(arr[1]);
 			var missionName;
-			console.log("id: " + id);
-			console.log("column: " + column);
-			console.log("row " + row);
 			if (typeof jsonData !== 'undefined' && jsonData !== null) { //Load from data.json
 				missionName = jsonData.data.missions[column - 1][row - 1];
 			} else { //Load from data.js
 				missionName = missions[column - 1][row - 1];
 			}
-			console.log(missionName);
 			return missionName;
 		}
 

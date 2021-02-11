@@ -42,9 +42,9 @@ var language_ru = {
    "time":"Time", //Header
    //Other
    "active":"Active", //Active Row
-   "hardcore":"Hardcore", //Header & Mission Popup & Settings
-   "standard":"Standard", //Header & Mission Popup & Settings
-   "operation":"Operation", //Mission Popup
+   "hardcore":"Ветеран", //Header & Mission Popup & Settings
+   "standard":"Новобранец", //Header & Mission Popup & Settings
+   "operation":"Операция", //Mission Popup
    "updated":"Updated", //Footer
    "by":"by", //Footer
    "offset minutes":"Offset Minutes", //Settings
