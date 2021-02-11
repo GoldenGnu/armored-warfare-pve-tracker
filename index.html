@@ -8,6 +8,8 @@
 	<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300&family=Poppins&display=swap" rel="stylesheet"> 
 	<script src="https://aw.nikr.net/data.js"></script>
 	<script src="https://aw.nikr.net/lang/ru.js"></script>
+	<script src="https://aw.nikr.net/lang/fr.js"></script>
+	<script src="https://aw.nikr.net/lang/de.js"></script>
 	<script>
 		//Globals
 		var jsonData = null;
@@ -223,6 +225,10 @@
 		function translate(string) {
 			if (language === "ru") {
 				return language_ru[string.toLowerCase()];
+			} else if (language === "fr") {
+				return language_fr[string.toLowerCase()];
+			} else if (language === "de") {
+				return language_de[string.toLowerCase()];
 			} else { //Default: en
 				return string;
 			}
@@ -1634,6 +1640,8 @@
 		<select id="language" onchange="saveLanguage();">
 			<option value="en">🇬🇧 English</option>
 			<option value="ru">🇷🇺 Russian</option>
+			<option value="fr">🇫🇷 French</option>
+			<option value="de">🇩🇪 German</option>
 		</select>
 	</div>
 	
