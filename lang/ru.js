@@ -38,16 +38,16 @@ var language_ru = {
 	"wildfire":"Чистое небо",
 	"zero hour":"Торнадо",
 //GUI
-   "start":"Start", //Header
-   "time":"Time", //Header
+   "start":"Через", //Header
+   "time":"Время", //Header
    //Other
-   "active":"Active", //Active Row
+   "active":"Текущее", //Active Row
    "hardcore":"Ветеран", //Header & Mission Popup & Settings
    "standard":"Новобранец", //Header & Mission Popup & Settings
    "operation":"Операция", //Mission Popup
-   "updated":"Updated", //Footer
-   "by":"by", //Footer
+   "updated":"Обновлено", //Footer
+   "by":"обновил", //Footer
    "offset minutes":"Offset Minutes", //Settings
    "offset seconds":"Offset Seconds", //Settings
-   "language":"Language" //Settings
+   "language":"Язык" //Settings
 };
