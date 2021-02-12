@@ -10,6 +10,7 @@
 	<script src="https://aw.nikr.net/lang/ru.js"></script>
 	<script src="https://aw.nikr.net/lang/fr.js"></script>
 	<script src="https://aw.nikr.net/lang/de.js"></script>
+	<script src="https://aw.nikr.net/lang/pl.js"></script>
 	<script>
 		//Globals
 		var jsonData = null;
@@ -231,6 +232,8 @@
 				return language_fr[string.toLowerCase()];
 			} else if (language === "de") {
 				return language_de[string.toLowerCase()];
+			} else if (language === "pl") {
+				return language_pl[string.toLowerCase()];
 			} else { //Default: en
 				return string;
 			}
@@ -1644,6 +1647,7 @@
 			<option value="ru">🇷🇺 Russian</option>
 			<option value="fr">🇫🇷 French</option>
 			<option value="de">🇩🇪 German</option>
+			<option value="pl">🇵🇱 Polish</option>
 		</select>
 	</div>
 	
