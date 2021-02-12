@@ -39,15 +39,15 @@ var language_de = {
 	"zero hour":"Stunde Null",
 //GUI
    "start":"Start", //Header
-   "time":"Time", //Header
+   "time":"Zeit", //Header
    //Other
-   "active":"Active", //Active Row
+   "active":"Aktiv", //Active Row
    "hardcore":"Hardcore", //Header & Mission Popup & Settings
    "standard":"Standard", //Header & Mission Popup & Settings
    "operation":"Operation", //Mission Popup
-   "updated":"Updated", //Footer
-   "by":"by", //Footer
-   "offset minutes":"Offset Minutes", //Settings
-   "offset seconds":"Offset Seconds", //Settings
-   "language":"Language" //Settings
+   "updated":"Aktualisiert", //Footer
+   "by":"von", //Footer
+   "offset minutes":"Offset Minuten", //Settings
+   "offset seconds":"Offset Sekunden", //Settings
+   "language":"Sprache" //Settings
 };
