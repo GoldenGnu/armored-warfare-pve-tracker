@@ -223,7 +223,9 @@
 		}
 
 		function translate(string) {
-			if (language === "ru") {
+			if (typeof string === 'undefined' && string === null || string === "") {
+				return "";
+			} else if (language === "ru") {
 				return language_ru[string.toLowerCase()];
 			} else if (language === "fr") {
 				return language_fr[string.toLowerCase()];
