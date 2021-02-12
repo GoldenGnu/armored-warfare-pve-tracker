@@ -202,19 +202,37 @@
 			}
 			.styled-table td:nth-of-type(1),
 			.styled-table td:nth-of-type(2) {
-				padding: 5px 15px;
+				padding: 5px 15px !important;
 			}
-			.styled-table tr:last-of-type td:nth-of-type(2) {
-				padding: 5px;
-			}
-			.styled-table td {
-				padding: 5px;
+			.styled-table #row1 td,
+			.styled-table #row2 td,
+			.styled-table #row3 td,
+			.styled-table #row4 td,
+			.styled-table #row5 td,
+			.styled-table #row6 td,
+			.styled-table #row7 td,
+			.styled-table #row8 td,
+			.styled-table #row9 td,
+			.styled-table #row10 td {
+				padding: 0;
 			}
 			.styled-table tbody td {
 				border-right: 1px solid #dddddd;
 			}
 			.styled-table input[type=text]{
 				border: none;
+				padding: 8px;
+			}
+			.styled-table input[type=text]:focus{
+				border: 1px solid black;
+				padding: 7px;
+			}
+			.styled-table input[type=number]{
+				width: 75px;
+			}
+			.styled-table label {
+				padding-right: 5px;
+				padding-left: 15px;
 			}
 			.styled-table tbody tr:last-of-type td {
 				background-color: #333333;
@@ -249,58 +267,14 @@
 			.styled-table tbody tr.active-row td:last-of-type {
 				border-right: none;
 			}
+			.styled-table tbody tr:last-of-type td:first-of-type {
+				text-align: left;
+			}
+			.styled-table tbody tr:last-of-type td {
+				text-align: right;
+			}
 			.styled-table tbody tr:last-of-type td:last-of-type {
 				text-align: center;
-			}
-			.fade-in {
-				animation: fadeIn ease 1s;
-				-webkit-animation: fadeIn ease 1s;
-				-moz-animation: fadeIn ease 1s;
-				-o-animation: fadeIn ease 1s;
-				-ms-animation: fadeIn ease 1s;
-			}
-			@keyframes fadeIn {
-				0% {
-					opacity:0;
-				}
-				100% {
-					opacity:1;
-				}
-			}
-
-			@-moz-keyframes fadeIn {
-				0% {
-					opacity:0;
-				}
-				100% {
-					opacity:1;
-				}
-			}
-
-			@-webkit-keyframes fadeIn {
-				0% {
-					opacity:0;
-				}
-				100% {
-					opacity:1;
-				}
-			}
-
-			@-o-keyframes fadeIn {
-				0% {
-					opacity:0;
-				}
-				100% {
-					opacity:1;
-				}
-			}
-			@-ms-keyframes fadeIn {
-				0% {
-					opacity:0;
-				}
-				100% {
-					opacity:1;
-				}
 			}
 		</style>
 </head>
@@ -508,15 +482,11 @@
 			<td>
 				<span id="10-6"></span>
 		<tr>
-			<td colspan="2" id="edited">
-				
-			<td>
+			<td colspan="3" id="edited">
+			<td colspan="3">
 				<label for="minutes">Offset Minutes</label> 
-			<td>
 				<input type="number" id="minutes" name="minutes" min="-60" max="60" value="0" required>
-			<td>
 				<label for="seconds">Offset Seconds</label>
-			<td>
 				<input type="number" id="seconds" name="seconds" min="-60" max="60" value="0" required>
 			<td colspan="2">
 				<input class="button" type="button" value="Clear"  onclick="resetData();">
